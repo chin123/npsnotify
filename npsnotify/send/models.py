@@ -1,8 +1,9 @@
 from django.db import models
+from django.utils import timezone
 
 # Create your models here.
 class notification(models.Model):
-    author = models.ForiegnKey('auth.User')
+    author = models.ForeignKey('auth.User')
     title = models.CharField(max_length=100)
     body = models.TextField()
     created_date = models.DateTimeField(default=timezone.now)
