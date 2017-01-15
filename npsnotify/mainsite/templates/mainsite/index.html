@@ -1,0 +1,101 @@
+{% load staticfiles %}
+<!DOCTYPE HTML>
+<html lang = "en">
+
+    <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1, safari=1, mozillafirefox=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="keywords" content="notification, school, notify, national public school, nps, bangalore">
+    <meta name="description" content="NPS - K's communication channel">
+    
+        
+        <title>Notify</title>
+        
+    <!-- Icon -->
+  <link rel="icon" type="image/png" href="LOGO.jpeg">
+    
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}" type="text/css">
+    
+        <!-- Custom Fonts -->
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+        
+    <link href='http://fonts.googleapis.com/css?family=Merriweather:400,300,300italic,400italic,700,700italic,900,900italic' rel='stylesheet' type='text/css'>
+        
+    <link rel="stylesheet" href="{% static 'css/font-awesome.min.css' %}" type="text/css">
+
+    <!-- Plugin CSS -->
+    <link rel="stylesheet" href="{% static 'css/animate.min.css' %}" type="text/css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="{% static 'css/creative.css' %}" type="text/css">
+        
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script> 
+    
+    </head>
+    
+    <body>
+
+            <center>
+                <br><br><br><br><br><br><br>
+                <h1 class="section-heading animated zoomIn"> N O T I F Y </h1>
+                <br><br><br>
+                    <input type="text" style="text-align:center; width: 300px;" name="email" id="email" placeholder="   Email Address " class="inputForm" />
+                <br><br><br> 
+                <input type="password" style="text-align:center; width: 300px;"  name="password" id="pass" placeholder=" Password">
+                <br><br><br>
+		<a class="btn btn-primary btn-xl page-scroll" style="background:rgb(48, 163, 224)" onclick='login()'>Log in</a>
+		<br><br><br>
+		<a href="pass.html"><p><u><i><b>Forgot Password?</b></i></u></p></a>
+	    </center>
+    </body>
+    <script>
+	function login() {
+		function getCookie(name) {
+			var cookieValue = null;
+			if (document.cookie && document.cookie !== '') {
+				var cookies = document.cookie.split(';');
+				for (var i = 0; i < cookies.length; i++) {
+					var cookie = jQuery.trim(cookies[i]);
+					// Does this cookie string begin with the name we want?
+					if (cookie.substring(0, name.length + 1) === (name + '=')) {
+						cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+						break;
+					}
+				}
+			}
+			return cookieValue;
+		}
+		var csrftoken = getCookie('csrftoken');
+				
+		var xhr = new XMLHttpRequest();
+		xhr.open('POST', "api-token-auth/", true);
+		xhr.setRequestHeader("X-CSRFToken", csrftoken);
+		xhr.setRequestHeader("Content-Type", "application/json");
+		var params = {
+			username: document.getElementById('email').value,
+			password: document.getElementById('pass').value,
+		}
+		xhr.send(JSON.stringify(params));
+		 
+		xhr.onreadystatechange = processRequest;
+		 
+		function processRequest(e) {
+		    if (xhr.readyState == 4 && xhr.status == 200) {
+			var response = JSON.parse(xhr.responseText);
+			console.log(response);
+			$('body').append("<center><a class=\"btn btn-primary btn-xl page-scroll\" style=\"background:rgb(0, 255,0)\">Success!</a></center>");
+			sessionStorage.setItem('token', response.token);
+			window.location = 'main/';
+		    }
+		    else if (xhr.readyState == 4 && xhr.status != 200) {
+			console.log("fail");
+			$('body').append("<center><a id=\"fail\" class=\"btn btn-primary btn-xl page-scroll\" style=\"background:rgb(255, 0,0)\">Login Unsuccesful. Please try again.</a></center>");
+
+			$("#fail").fadeOut(10000);
+		    }
+		}
+	}
+    </script>
+</html>   
