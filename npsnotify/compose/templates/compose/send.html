@@ -39,15 +39,11 @@
 
             <center>
                 <br><br><br><br><br><br><br>
-                <h1 class="section-heading animated zoomIn"> B O T I F Y </h1>
+                <h1 class="section-heading animated zoomIn"> N O T I F Y </h1>
                 <br><br><br>
-                    <input type="text" style="text-align:center; width: 300px;" name="email" id="email" placeholder="   Email Address " class="inputForm" />
+                    <input type="text" style="text-align:center; width: 300px;" id="notif" placeholder="   Notification " class="inputForm" />
                 <br><br><br> 
-                <input type="password" style="text-align:center; width: 300px;"  name="password" id="pass" placeholder=" Password">
-                <br><br><br>
-		<a class="btn btn-primary btn-xl page-scroll" style="background:rgb(48, 163, 224)" onclick='login()'>Log in</a>
-		<br><br><br>
-		<a href="pass.html"><p><u><i><b>Forgot Password?</b></i></u></p></a>
+		<a class="btn btn-primary btn-xl page-scroll" style="background:rgb(48, 163, 224)" onclick='login()'>Send</a>
 	    </center>
     </body>
     <script>
@@ -68,14 +64,18 @@
 			return cookieValue;
 		}
 		var csrftoken = getCookie('csrftoken');
+		var token = sessionStorage.getItem('token');
+		var tokenheader = "Token " + token;
 				
 		var xhr = new XMLHttpRequest();
-		xhr.open('POST', "send/", true);
+		xhr.open('POST', "http://localhost:8000/send/", true);
 		xhr.setRequestHeader("X-CSRFToken", csrftoken);
 		xhr.setRequestHeader("Content-Type", "application/json");
+		xhr.setRequestHeader("Authorization", tokenheader);
+
 		var params = {
-			notification: document.getElementById('email').value,
-		}
+			notification: document.getElementById('notif').value
+		};
 		xhr.send(JSON.stringify(params));
 		 
 		xhr.onreadystatechange = processRequest;

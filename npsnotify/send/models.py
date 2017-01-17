@@ -23,13 +23,6 @@ class notification(models.Model):
     def __str__(self):
         return self.title
 
-class receipent(models.Model):
-    email = models.CharField(max_length=100)
-    name = models.CharField(max_length=100)
-    grade = models.IntegerField()
-    section = models.CharField(max_length=1)
-    house = models.CharField(max_length=100)
-
 #create new user tokens
 @receiver(post_save, sender=settings.AUTH_USER_MODEL)
 def create_auth_token(sender, instance=None, created=False, **kwargs):
