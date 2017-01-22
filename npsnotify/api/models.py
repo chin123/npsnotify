@@ -13,12 +13,6 @@ class notification(models.Model):
     body = models.TextField()
     created_date = models.DateTimeField(default=timezone.now)
     groups = models.TextField()
-    goers = models.TextField()
-
-
-    def publish(self):
-        self.created_date = timezone.now()
-        self.save()
 
     def __str__(self):
         return self.title
