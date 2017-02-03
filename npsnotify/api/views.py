@@ -48,12 +48,18 @@ class details(APIView):
         for i in group:
             if request.user.groups.filter(name=i).exists() == 0:
                 resp = i
-        jresp = "{type: \"" + resp + "\",name:" + request.user.name + "}"
-        return Response(jresp, status=status.HTTP_200_OK)
+        jresp = {'type': resp, 'name': request.user.username};
+        c = json.dumps(jresp)
+        d = json.loads(c)
+        return Response(d, status=status.HTTP_200_OK)
 
 class fetchold(APIView):
-    a = notification.objects.all()[:5]
-    b = "{}"
-    for i in a:
-        b += "{title: " + i.title + ", body: " + i.notif + ", time: " + i.created_date + "},"
-    return Response(b, status=status.HTTP_200_OK)
+    def get(self,request, *args, **kw):
+        a = notification.objects.filter(author=request.user);
+        a = a[len(a) - 6:]
+        b = [] 
+        for i in a:
+            b.append({'title': i.title, 'body':  i.body, 'time': str(i.created_date)})
+        c = json.dumps(b);
+        d = json.loads(c);
+        return Response(d, status=status.HTTP_200_OK)

@@ -56,6 +56,8 @@
             </center>
     </body>
     <script>
+	if (sessionStorage['token'])
+		window.location = "http://localhost:8000/main/";
 	function login() {
 		function getCookie(name) {
 			var cookieValue = null;
