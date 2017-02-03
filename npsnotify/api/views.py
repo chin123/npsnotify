@@ -17,6 +17,7 @@ class sendmsg(APIView):
         data = json.loads(request.body.decode())
         notif = data["notification"]
         groupl = data["groups"].split(',')
+        title = data["title"]
         print("notification:", notif,"groups:", groupl)
         names = User.objects.filter(groups__name__in=groupl)
         emails = set()
@@ -28,7 +29,7 @@ class sendmsg(APIView):
             if i == '':
                 continue
             from_email = Email("shishirnhg@gmail.com")
-            subject = "Testing notify"
+            subject = "Message from notify: " + title
             to_email = Email(i)
             content = Content("text/plain", notif)
             mail = Mail(from_email, subject, to_email, content)
@@ -36,7 +37,7 @@ class sendmsg(APIView):
             print(response.status_code)
             print(response.body)
             print(response.headers)
-        n = notification(author=request.user,title="test",body=notif,groups=data["groups"])
+        n = notification(author=request.user,title=title,body=notif,groups=data["groups"])
         n.save()
         return Response("{}", status=status.HTTP_200_OK)	
 
