@@ -11,44 +11,49 @@
     
         
         <title>Notify</title>
+   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+        
         
     <!-- Icon -->
   <link rel="icon" type="image/png" href="LOGO.jpeg">
     
-    <!-- Bootstrap Core CSS -->
-    <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}" type="text/css">
-    
-        <!-- Custom Fonts -->
-    <link href='http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
-        
-    <link href='http://fonts.googleapis.com/css?family=Merriweather:400,300,300italic,400italic,700,700italic,900,900italic' rel='stylesheet' type='text/css'>
-        
-    <link rel="stylesheet" href="{% static 'css/font-awesome.min.css' %}" type="text/css">
 
+        
     <!-- Plugin CSS -->
     <link rel="stylesheet" href="{% static 'css/animate.min.css' %}" type="text/css">
+    <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
 
-    <!-- Custom CSS -->
-    <link rel="stylesheet" href="{% static 'css/creative.css' %}" type="text/css">
+
+    <!--Import Google Icon Font-->
+      <link href="http://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
         
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script> 
+      <!--Import materialize.css-->
+      <link type="text/css" rel="stylesheet" href="{% static 'css/materialize.min.css' %}"  media="screen,projection"/>
+
+      <!--Let browser know website is optimized for mobile-->
+      <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+        
+    <!-- Plugin CSS -->
+    <link rel="stylesheet" href="{% static 'css/animate.css' %}" type="text/css">
+        
     
     </head>
     
     <body>
 
             <center>
-                <br><br><br><br><br><br><br>
+                <br><br>
                 <h1 class="section-heading animated zoomIn"> N O T I F Y </h1>
                 <br><br><br>
-                    <input type="text" style="text-align:center; width: 300px;" name="email" id="email" placeholder="   Email Address " class="inputForm" />
+                    <input type="text" style="text-align:center; width: 300px;" id="email" name="email" placeholder="   Email Address " class="inputForm" />
                 <br><br><br> 
-                <input type="password" style="text-align:center; width: 300px;"  name="password" id="pass" placeholder=" Password">
+                <input type="password" style="text-align:center; width: 300px;" id="pass"  name="password" placeholder=" Password">
                 <br><br><br>
-		<a class="btn btn-primary btn-xl page-scroll" style="background:rgb(48, 163, 224)" onclick='login()'>Log in</a>
-		<br><br><br>
-		<a href="pass.html"><p><u><i><b>Forgot Password?</b></i></u></p></a>
-	    </center>
+                <a class="waves-effect waves-light btn-large" id="loginbutton">Log in</a>
+                <br><br><br>
+                <a href="pass.html"><p><u><i><b>Forgot Password?</b></i></u></p></a>
+                <br><br>
+            </center>
     </body>
     <script>
 	function login() {
@@ -97,5 +102,8 @@
 		    }
 		}
 	}
+	$('#loginbutton').click(function () {
+		login();
+	});
     </script>
-</html>   
+</html>
