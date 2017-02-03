@@ -50,3 +50,10 @@ class details(APIView):
                 resp = i
         jresp = "{type: \"" + resp + "\",name:" + request.user.name + "}"
         return Response(jresp, status=status.HTTP_200_OK)
+
+class fetchold(APIView):
+    a = notification.objects.all()[:5]
+    b = "{}"
+    for i in a:
+        b += "{title: " + i.title + ", body: " + i.notif + ", time: " + i.created_date + "},"
+    return Response(b, status=status.HTTP_200_OK)
