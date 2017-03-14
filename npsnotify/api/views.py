@@ -19,7 +19,12 @@ class sendmsg(APIView):
         groupl = data["groups"].split(',')
         title = data["title"]
         print("notification:", notif,"groups:", groupl)
-        names = User.objects.filter(groups__name__in=groupl)
+        names_classes = set(User.objects.filter(groups__name__in=groupl))
+        if data["subgroups"] != "null":
+            names_subgroup = set(User.objects.filter(groups__name=data["subgroups"]))
+            names = set(names_classes).intersection(names_subgroup)
+        else:
+            names = names_classes
         emails = set()
         for i in names:
             emails.add(i.email)
@@ -57,6 +62,7 @@ class fetchold(APIView):
     def get(self,request, *args, **kw):
         a = notification.objects.filter(author=request.user);
         a = a[len(a) - 6:]
+        a = a[::-1]
         b = [] 
         for i in a:
             b.append({'title': i.title, 'body':  i.body, 'time': str(i.created_date)})
