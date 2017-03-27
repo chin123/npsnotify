@@ -96,11 +96,12 @@
 				    <option value="1">IIT Coaching</option>
 				    <option value="2">Basketball Class</option>
 				    <option value="3">School Choir</option>
+					<option value="4">All Students</option>
 			    </select>
 					<label>Choose your sub-group</label>
 				</div>
 			</div>
-			<table class="centered">
+			<table class="centered" id="tableClasses">
 				<thead>
 					<tr>
 						<th>
@@ -359,7 +360,6 @@
 					<div class="col s4 offset-s1">
 						<div class="card-panel grey lighten-3">
 							<h4>Classes:</h4>
-							<br>
 							<span id="classesreview">
 
 
@@ -389,10 +389,8 @@
 
 
 	<div id="tab2" class="col s12">
-		<div class="row">
-			<div class="col s4 offset-s4" id="posts">
+		<div id="posts">
 
-			</div>
 		</div>
 	</div>
 
@@ -440,7 +438,9 @@
 				for (var i = 0; i < list_classes.length; i++) {
 					$('#classesreview').append("<div class=\"chip blue\"><span class=\"white-text\">" + list_classes[i] + "</span></div>&nbsp;&nbsp;");
 					console.log(list_classes[i]);
+					
 				}
+				$('#classesreview').append("<h5>Group: " + subgroups_name[$('#subgroup').val().toString()] + "</h5></div>");
 
 			});
 
@@ -454,7 +454,7 @@
 			$('.primary').click(function () {
 				if ($(this).hasClass("grey")) {
 					$('.primclass').each(function () {
-						if ($(this).hasClass("grey")) {
+						if ($(this).hasClass("grey") && !($(this).hasClass("disabled"))) {
 							$(this).removeClass("grey");
 							$(this).addClass("orange");
 							count++;
@@ -484,7 +484,7 @@
 				}
 			});
 			$('.secondary').click(function () {
-				if ($(this).hasClass("grey")) {
+				if ($(this).hasClass("grey") && !($(this).hasClass("disabled"))) {
 					$('.secclass').each(function () {
 						if ($(this).hasClass("grey")) {
 							$(this).removeClass("grey");
@@ -516,7 +516,7 @@
 				}
 			});
 			$('.high').click(function () {
-				if ($(this).hasClass("grey")) {
+				if ($(this).hasClass("grey") && !($(this).hasClass("disabled"))) {
 					$('.highclass').each(function () {
 						if ($(this).hasClass("grey")) {
 							$(this).removeClass("grey");
@@ -682,6 +682,9 @@
 					subgroups_tosend = "null";
 				} else {
 					subgroups_tosend = subgroups_name[$('#subgroup').val().toString()];
+					if (subgroups_tosend == "4") {
+						subgroups_tosend = "null";
+					}
 					console.log($('#subgroup').val().toString());
 				}
 				var params = {
@@ -699,9 +702,9 @@
 					if (xhr.readyState == 4 && xhr.status == 200) {
 						var msg = $('.status-box').val();
 						var title = $('#title').val();
-						var notif = "<h5>Title:</h5><br><h5>" + title + "</h5><br><h5>Notification:</h5><br><h5>" + msg + "</h5>";
-						var posted_notif = "<div class=\"card-panel grey lighten-3\">" + notif + "</div>";
-						$('#posts').append(posted_notif);
+						var notif = "<h4>Title:" + title + "</h4><h4>Notification:</h4><h5>" + msg + "</h5>";
+						var posted_notif = "<div class=\"row\"><div class=\"col s10 offset-s1 card-panel grey lighten-3\">" + notif + "</div></div>";
+						$('#posts').prepend(posted_notif);
 					}
 					else if (xhr.readyState == 4 && xhr.status != 200) {
 						console.log("fail");
@@ -729,14 +732,19 @@
 				if (xhr.readyState == 4 && xhr.status == 200) {
 					var a = $.parseJSON(xhr.responseText);
 					console.log(a[0]);
-					for (var i = 0; i < a.length; i++) {
-						var title = a[i].title;
-						var msg = a[i].body;
-						var time = a[i].time;
-						var notif = "<h5>Title:</h5><br><h5>" + title + "</h5><br><h5>Notification:</h5><br><h5>" + msg + "</h5><br>Time: " + time;
-						var posted_notif = "<div class=\"card-panel grey lighten-3\">" + notif + "</div>";
-						$('#posts').append(posted_notif);
+					console.log(a.length)
+					for (var i = 0; i < 6; i++) {
+						var posted_notif = "";
+						for (var j = 0; j < 3; j++) {
+							var title = a[i + j].title;
+							var msg = a[i + j].body;
+							var time = a[i + j].time;
+							notif = "<h4>Title: " + title + "</h4><h4>Notification:</h4><h5>" + msg + "</h5>Time: " + time;
+							posted_notif += "<div class=\"col s10 offset-s1 card-panel grey lighten-3\">" + notif + "</div>";
+						}
+						$('#posts').append("<div class=\"row\">" + posted_notif + "</div>");
 					}
+
 				}
 				else if (xhr.readyState == 4 && xhr.status != 200) {
 					console.log("fail");
@@ -767,23 +775,36 @@
 			$('select').material_select();
 			var subgroups = { 1: ["9A", "9B", "9C", "10A", "10B", "10C", "11A", "11B", "12A", "12B"], 2: ["9A", "9B", "9C"], 3: ["8A", "8B", "8C"] };
 			var subgroups_name = { 1: "IIT Coaching", 2: "Basketball", 3: "School Choir" }
-			$('.grade').click(function () {
-				var clicked_grade = $(this).text();
+			$("#subgroup").change(function () {
 				var clicked_group = $('#subgroup').val().toString();
-				var f = 0;
-				for (var i = 0; i < subgroups[clicked_group].length; i++) {
-					if (clicked_grade == subgroups[clicked_group][i]) {
-						f = 1;
-						break;	
-					}
-				}
-				if (!f) {
-					alert("Sorry! This class doesn't belong to the subgroup you have selected.");
-					$(this).removeClass("purple orange blue");
-					$(this).addClass("grey");
-					count--;
-					ind = list_classes.indexOf($(this).text());
-					list_classes.splice(ind, 1);
+				if (clicked_group == "4") {
+					$('#tableClasses tr td').each(function () {
+						var $this = $(this).children(":first");
+						if ($this.hasClass("disabled")) {
+							$this.removeClass("disabled");
+						}
+					});
+				} else {
+					$('#tableClasses tr td').each(function () {
+						var $this = $(this).children(":first");
+						var f = 0;
+						for (var i = 0; i < subgroups[clicked_group].length; i++) {
+							if ($this.text() == subgroups[clicked_group][i]) {
+								f = 1;
+								break;
+							}
+						}
+						if (!f) {
+							$this.addClass("disabled");
+							if ($(this).hasClass("blue") || $(this).hasClass("purple") || $(this).hasClass("orange")) {
+								$(this).removeClass("blue purple orange");
+								$(this).addClass("grey");
+								ind = list_classes.indexOf($(this).text());
+								list_classes.splice(ind, 1);
+								count--;
+							}
+						}
+					});
 				}
 			});
 		}
